@@ -135,45 +135,44 @@ namespace DeepSpace
 
 	
 	
-	public Movimiento CalcularMovimiento(ArbolGeneral<Planeta> arbol)
-	{
-		List<ArbolGeneral<Planeta>> bot = new List<ArbolGeneral<Planeta>>();//lista de planetas del bot
-		List<ArbolGeneral<Planeta>> player = new List<ArbolGeneral<Planeta>>();//lista de planetas del jugador
-		
-		__caminoBot(arbol,arbol,bot);
-		__caminoJugador(arbol,arbol,player);
-		
-		if(!bot[0].getDatoRaiz().EsPlanetaDeLaIA()){
-		
-			Movimiento movimiento = new Movimiento(bot[bot.Count-1].getDatoRaiz(),bot[bot.Count-2].getDatoRaiz());
-			
-			return movimiento;
-		}
-		int contador = 0;
-		if(player[0].getDatoRaiz().EsPlanetaDeLaIA()){//si la raiz es de la IA
-			while(contador<player.Count){
-				if(player[contador].getDatoRaiz().EsPlanetaDeLaIA() && !player[contador+1].getDatoRaiz().EsPlanetaDeLaIA()){
-					//si el planeta del contador es de la ia y el siguiente no es de la IA
+public Movimiento CalcularMovimiento(ArbolGeneral<Planeta> arbol)
+{
+	List<ArbolGeneral<Planeta>> bot = new List<ArbolGeneral<Planeta>>();//lista de planetas del bot
+	List<ArbolGeneral<Planeta>> player = new List<ArbolGeneral<Planeta>>();//lista de planetas del jugador
 	
-					Movimiento movimiento = new Movimiento(player[contador].getDatoRaiz(),player[contador+1].getDatoRaiz());
+	__caminoBot(arbol,arbol,bot); // Declaraciones del bot
+	__caminoJugador(arbol,arbol,player); // Declaraciones del jugador
+	
+	if(!bot[0].getDatoRaiz().EsPlanetaDeLaIA()){ //Si desde su pocision es siguiente paneta es de la IA
+		
+		Movimiento movimiento = new Movimiento(bot[bot.Count-1].getDatoRaiz(),bot[bot.Count-2].getDatoRaiz());
+		//Se mueve desde el origen hasta llegar a la raiz
+		
+		return movimiento;
+	}
+	int contador = 0;
+	if(player[0].getDatoRaiz().EsPlanetaDeLaIA()){//si la raiz es de la IA
+		while(contador<player.Count){
+			if(player[contador].getDatoRaiz().EsPlanetaDeLaIA() && !player[contador+1].getDatoRaiz().EsPlanetaDeLaIA()){
+				//si el planeta del contador es de la IA y el siguiente no es de la IA
 				
-					return movimiento;
-				}
-				else{
-					contador++;
-				}
+				Movimiento movimiento = new Movimiento(player[contador].getDatoRaiz(),player[contador+1].getDatoRaiz());
+				//Se mueve hasta llegar el jugador
+				
+				return movimiento;
+			}
+			else{
+				contador++;
 			}
 		}
-		return null;
 	}
-	
-	
-	
-	
-	
-	
+	return null;
+}
+
+
 	
 	private bool __caminoBot(ArbolGeneral<Planeta> arbol, ArbolGeneral<Planeta> origen, List<ArbolGeneral<Planeta>> camino){
+	//Funcion recursiva para el bot. Si el planeta (que es arbol auxiliar), no es del bot, sigue revisando por el hijo.
 		bool caminoHallado = false;
 		
 		camino.Add(origen);
@@ -198,6 +197,7 @@ namespace DeepSpace
 	}
 		
 	private bool __caminoJugador(ArbolGeneral<Planeta> arbol, ArbolGeneral<Planeta> origen, List<ArbolGeneral<Planeta>> camino){
+	//funcion recursiva para el jugador.Si el planeta (que es arbol auxiliar), no es del jugador, sigue revisando por el hijo.
 		bool caminoHallado = false;
 		
 		camino.Add(origen);
